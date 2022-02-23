@@ -1,22 +1,22 @@
 import chroma from 'chroma-js';
 const levels = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
 
-function generatePallete(pallete) {
-    let newPallete = {
-        name: pallete.paletteName,
-        id: pallete.id,
-        emoji: pallete.emoji,
+function generatePalette(palette) {
+    let newPalette = {
+        name: palette.paletteName,
+        id: palette.id,
+        emoji: palette.emoji,
         colors: {}
     };
 
     for (let level of levels) {
-        newPallete.colors[level] = [];
+        newPalette.colors[level] = [];
     }
 
-    for (let color of pallete.colors) {
+    for (let color of palette.colors) {
         let colorScale = generateScale(color.color, 10).reverse();
         for (let i in colorScale) {
-            newPallete.colors[levels[i]].push({
+            newPalette.colors[levels[i]].push({
                 name: `${color.name} ${levels[i]}`,
                 id: color.name.toLowerCase().replace(/ /g, '-'),
                 hex: colorScale[i],
@@ -29,7 +29,7 @@ function generatePallete(pallete) {
         }
     }
 
-    return newPallete;
+    return newPalette;
 }
 
 // originally thought of from black - color - white, but it was found too dark
@@ -51,4 +51,4 @@ function generateScale(hexColor, numOfColors) {
 
 }
 
-export {generatePallete};
+export {generatePalette};
