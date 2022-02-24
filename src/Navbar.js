@@ -1,11 +1,33 @@
 import React, {Component} from "react";
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
+import {MenuItem, Select} from "@material-ui/core";
 import './Navbar.css';
 
 class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {curFormat: 'hex'};
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(evt) {
+        this.setState({curFormat: evt.target.value},
+            this.props.changeFormat(evt.target.value))
+    }
+
     render() {
-        const {level, changeLevel} = this.props;
+        const {curFormat} = this.state;
+        const {level, changeLevel, colorFormats} = this.props;
+
+        const colorFormatMenu = colorFormats.map(colorFormat => (
+            <MenuItem
+                value={colorFormat.format}
+                key={colorFormat.format}
+            >
+                {colorFormat.description}
+            </MenuItem>
+        ))
         return (
             <header className='Navbar'>
                 <div className='Navbar-logo'>
@@ -22,6 +44,14 @@ class Navbar extends Component {
                             onAfterChange={changeLevel}
                         />
                     </div>
+                </div>
+                <div className='Navbar-select-container'>
+                    <Select
+                        value={curFormat}
+                        onChange={this.handleChange}
+                    >
+                        {colorFormatMenu}
+                    </Select>
                 </div>
             </header>
         );
