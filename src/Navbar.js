@@ -1,24 +1,32 @@
 import React, {Component} from "react";
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import {MenuItem, Select} from "@material-ui/core";
+import {IconButton, MenuItem, Select, Snackbar} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import './Navbar.css';
 
 class Navbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {curFormat: 'hex'};
-        this.handleChange = this.handleChange.bind(this);
+        this.state = {isSnackbarOpen: false};
+        this.handleFormatChange = this.handleFormatChange.bind(this);
+        this.closeSnackbar = this.closeSnackbar.bind(this);
     }
 
-    handleChange(evt) {
-        this.setState({curFormat: evt.target.value},
-            this.props.changeFormat(evt.target.value))
+
+    handleFormatChange(evt) {
+        this.props.changeFormat(evt.target.value);
+        this.setState({isSnackbarOpen: true});
+    }
+
+
+    closeSnackbar() {
+        this.setState({isSnackbarOpen: false});
     }
 
     render() {
-        const {curFormat} = this.state;
-        const {level, changeLevel, colorFormats} = this.props;
+        const {isSnackbarOpen} = this.state;
+        const {level, changeLevel, curFormat, colorFormats} = this.props;
 
         const colorFormatMenu = colorFormats.map(colorFormat => (
             <MenuItem
@@ -48,11 +56,31 @@ class Navbar extends Component {
                 <div className='Navbar-select-container'>
                     <Select
                         value={curFormat}
-                        onChange={this.handleChange}
+                        onChange={this.handleFormatChange}
                     >
                         {colorFormatMenu}
                     </Select>
                 </div>
+                <Snackbar
+                    anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
+                    open={isSnackbarOpen}
+                    autoHideDuration={3000}
+                    message={<span id='message-id'>{`Format changed to ${curFormat.toUpperCase()}!`}</span>}
+                    ContentProps={{
+                        'aria-describedby': 'message-id'
+                    }}
+                    onClose={this.closeSnackbar}
+                    action={[
+                        <IconButton
+                            onClick={this.closeSnackbar}
+                            color = 'inherit'
+                            key='close'
+                            aria-level='close'
+                        >
+                            <CloseIcon/>
+                        </IconButton>
+                    ]}
+                />
             </header>
         );
     };

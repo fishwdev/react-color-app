@@ -35,6 +35,7 @@ class Palette extends Component {
                     level={level}
                     changeLevel={this.changeLevel}
                     changeFormat={this.changeFormat}
+                    curFormat = {curFormat}
                     colorFormats={palette.colorFormats}
                 />
                 <div className='Palette-colors'>
