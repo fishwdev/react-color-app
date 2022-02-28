@@ -4,6 +4,7 @@ import 'rc-slider/assets/index.css';
 import {IconButton, MenuItem, Select, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import './Navbar.css';
+import {Link} from "react-router-dom";
 
 class Navbar extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class Navbar extends Component {
         return (
             <header className='Navbar'>
                 <div className='Navbar-logo'>
-                    <a href='/'>Reactcolorpicker</a>
+                    <Link to='/'>Reactcolorpicker</Link>
                 </div>
                 <div className='Navbar-slider-container'>
                     <span>Level: {level}</span>
