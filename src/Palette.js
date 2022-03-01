@@ -31,7 +31,8 @@ class Palette extends Component {
                 name={color.name}
                 key={color.id}
                 colorId={color.id}
-                paletteID={palette.id}
+                paletteId={palette.id}
+                displayMore={true}
             />
         ));
         return(
