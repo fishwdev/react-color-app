@@ -43,7 +43,7 @@ class ColorBox extends Component {
                         <Link to={`/palette/${paletteId}/${colorId}`} onClick={(evt) => evt.stopPropagation()}>
                             <span className='ColorBox-view-more'>More</span>
                         </Link> :
-                        ""
+                        null
                     }
 
                 </div>

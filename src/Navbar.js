@@ -27,7 +27,7 @@ class Navbar extends Component {
 
     render() {
         const {isSnackbarOpen} = this.state;
-        const {level, changeLevel, curFormat, colorFormats} = this.props;
+        const {level, changeLevel, curFormat, colorFormats, isSingleColor} = this.props;
 
         const colorFormatMenu = colorFormats.map(colorFormat => (
             <MenuItem
@@ -42,18 +42,22 @@ class Navbar extends Component {
                 <div className='Navbar-logo'>
                     <Link to='/'>Reactcolorpicker</Link>
                 </div>
-                <div className='Navbar-slider-container'>
-                    <span>Level: {level}</span>
-                    <div className='Navbar-slider'>
-                        <Slider
-                            defaultValue={level}
-                            min={100}
-                            max={900}
-                            step={100}
-                            onAfterChange={changeLevel}
-                        />
+
+                {!isSingleColor
+                ? <div className='Navbar-slider-container'>
+                        <span>Level: {level}</span>
+                        <div className='Navbar-slider'>
+                            <Slider
+                                defaultValue={level}
+                                min={100}
+                                max={900}
+                                step={100}
+                                onAfterChange={changeLevel}
+                            />
+                        </div>
                     </div>
-                </div>
+                : null}
+
                 <div className='Navbar-select-container'>
                     <Select
                         value={curFormat}
