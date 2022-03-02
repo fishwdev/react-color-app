@@ -1,10 +1,10 @@
 import React, {Component} from "react";
+import {Link} from "react-router-dom";
+import {IconButton, MenuItem, Select, Snackbar, withStyles} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
-import {IconButton, MenuItem, Select, Snackbar} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import './Navbar.css';
-import {Link} from "react-router-dom";
+import styles from './styles/NavbarStyles';
 
 class Navbar extends Component {
     constructor(props) {
@@ -27,7 +27,7 @@ class Navbar extends Component {
 
     render() {
         const {isSnackbarOpen} = this.state;
-        const {level, changeLevel, curFormat, colorFormats, isSingleColor} = this.props;
+        const {classes, level, changeLevel, curFormat, colorFormats, isSingleColor} = this.props;
 
         const colorFormatMenu = colorFormats.map(colorFormat => (
             <MenuItem
@@ -38,15 +38,15 @@ class Navbar extends Component {
             </MenuItem>
         ))
         return (
-            <header className='Navbar'>
-                <div className='Navbar-logo'>
+            <header className={classes.Navbar}>
+                <div className={classes.logo}>
                     <Link to='/'>Reactcolorpicker</Link>
                 </div>
 
                 {!isSingleColor
-                ? <div className='Navbar-slider-container'>
+                    ? <div className='Navbar-slider-container'>
                         <span>Level: {level}</span>
-                        <div className='Navbar-slider'>
+                        <div className={classes.slider}>
                             <Slider
                                 defaultValue={level}
                                 min={100}
@@ -58,7 +58,7 @@ class Navbar extends Component {
                     </div>
                 : null}
 
-                <div className='Navbar-select-container'>
+                <div className={classes.selectContainer}>
                     <Select
                         value={curFormat}
                         onChange={this.handleFormatChange}
@@ -91,4 +91,4 @@ class Navbar extends Component {
     };
 }
 
-export default Navbar;
+export default withStyles(styles)(Navbar);
