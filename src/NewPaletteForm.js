@@ -75,9 +75,27 @@ const styles = theme => ({
 });
 
 class NewPaletteForm extends Component {
-    state = {
-        open: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: true,
+            curColor: 'teal',
+            curPalette: ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+        }
+        this.handleColorChange = this.handleColorChange.bind(this);
+        this.addColor = this.addColor.bind(this);
+    }
+
+    addColor() {
+        this.setState((prevState) => (
+            {curPalette: [...prevState.curPalette, this.state.curColor]}
+        ));
+    }
+
+    handleColorChange(selectedColor) {
+        let {r, g, b ,a} = selectedColor.rgb;
+        this.setState({curColor: `rgba(${r},${g},${b},${a})`});
+    }
 
     handleDrawerOpen = () => {
         this.setState({open: true});
@@ -89,7 +107,7 @@ class NewPaletteForm extends Component {
 
     render() {
         const {classes, theme} = this.props;
-        const {open} = this.state;
+        const {curColor, curPalette, open} = this.state;
 
         return (
             <div className={classes.root}>
@@ -135,10 +153,17 @@ class NewPaletteForm extends Component {
                         <Button variant='contained' color='primary'>Random Color</Button>>
                     </div>
                     <ChromePicker
-                        color='purple'
-                        onChangeComplete={(selectedColor) => (console.log(selectedColor))}
+                        color={curColor}
+                        onChangeComplete={this.handleColorChange}
                     />
-                    <Button variant='contained' color='primary'>Add Color</Button>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        style={{backgroundColor: curColor}}
+                        onClick={this.addColor}
+                    >
+                        Add Color
+                    </Button>
                 </Drawer>
                 <main
                     className={classNames(classes.content, {
@@ -146,6 +171,11 @@ class NewPaletteForm extends Component {
                     })}
                 >
                     <div className={classes.drawerHeader}/>
+                    <ul>
+                        {curPalette.map(color => (
+                            <li style={{backgroundColor: color}}>{color}</li>
+                        ))}
+                    </ul>
                 </main>
             </div>
         );
