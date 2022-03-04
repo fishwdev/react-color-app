@@ -6,7 +6,7 @@ import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import {
     AppBar,
     Button,
-    CssBaseline,
+    // CssBaseline,
     Divider,
     Drawer,
     IconButton,
@@ -83,12 +83,20 @@ class NewPaletteForm extends Component {
         this.state = {
             open: true,
             curColor: 'teal',
-            curPalette: [{color: 'red', name: 'red'}],
+            curPalette: [
+                {color: 'red', name: 'red'},
+                {color: 'orange', name: 'orange'},
+                {color: 'yellow', name: 'yellow'},
+                {color: 'green', name: 'green'},
+                {color: 'blue', name: 'blue'},
+                {color: 'purple', name: 'purple'}
+            ],
             inputColor: ''
         }
         this.handleColorChange = this.handleColorChange.bind(this);
         this.addColor = this.addColor.bind(this);
         this.handleTextInputChange = this.handleTextInputChange.bind(this);
+        this.handleSave = this.handleSave.bind(this);
     }
 
     componentDidMount() {
@@ -106,8 +114,8 @@ class NewPaletteForm extends Component {
 
     addColor() {
         const newColor = {
-            color: this.state.curColor,
-            name: this.state.inputColor
+            name: this.state.inputColor,
+            color: this.state.curColor
         };
         this.setState((prevState) => ({
             curPalette: [...prevState.curPalette, newColor],
@@ -116,9 +124,12 @@ class NewPaletteForm extends Component {
     }
 
     handleColorChange(selectedColor) {
-        let {r, g, b, a} = selectedColor.rgb;
+        // let {r, g, b, a} = selectedColor.rgb;
+        // this.setState((prevProps) => ({
+        //     curColor: `rgba(${r},${g},${b},${a})`
+        // }));
         this.setState((prevProps) => ({
-            curColor: `rgba(${r},${g},${b},${a})`
+            curColor: selectedColor.hex
         }));
     }
 
@@ -134,14 +145,27 @@ class NewPaletteForm extends Component {
         this.setState({[evt.target.name]: evt.target.value});
     }
 
+    handleSave() {
+        let newPalletName = 'New Test Palette';
+        const newPalette = {
+            paletteName: newPalletName,
+            id: newPalletName.toLowerCase().replace(/ /g, '-'),
+            emoji: 'test',
+            colors: this.state.curPalette
+        };
+        this.props.savePalette(newPalette);
+        this.props.history.push('/');
+    }
+
     render() {
         const {classes, theme} = this.props;
         const {curColor, curPalette, open, inputColor} = this.state;
 
         return (
             <div className={classes.root}>
-                <CssBaseline/>
+                {/*<CssBaseline/>*/}
                 <AppBar
+                    color='default'
                     position='fixed'
                     className={classNames(classes.appBar, {
                         [classes.appBarShift]: open
@@ -159,6 +183,13 @@ class NewPaletteForm extends Component {
                         <Typography variant='h6' color='inherit' noWrap>
                             Persistent drawer
                         </Typography>
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            onClick={this.handleSave}
+                        >
+                            Save
+                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -179,7 +210,7 @@ class NewPaletteForm extends Component {
                     <Typography variant='h4'>Design your palette</Typography>
                     <div>
                         <Button variant='contained' color='secondary'>Clear Palette</Button>
-                        <Button variant='contained' color='primary'>Random Color</Button>>
+                        <Button variant='contained' color='primary'>Random Color</Button>
                     </div>
                     <ChromePicker
                         color={curColor}

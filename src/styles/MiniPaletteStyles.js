@@ -5,11 +5,12 @@ export default {
         borderRadius: '5px',
         padding: '0.5rem',
         position: 'relative',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         '&:hover': {
             cursor: 'pointer'
         },
         height: '100%'
+
     },
     colors: {
         backgroundColor: '#dae1e4',
@@ -38,6 +39,6 @@ export default {
         display: 'inline-block',
         margin: '0 auto',
         position: 'relative',
-        marginBottom: '-3.5px'
+        marginBottom: '-4px'
     }
 };
