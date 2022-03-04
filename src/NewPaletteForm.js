@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import classNames from 'classnames';
 import {ChromePicker} from "react-color";
+import DraggableColorBox from "./DraggableColorBox";
 import {
     AppBar,
     Button,
@@ -58,6 +59,7 @@ const styles = theme => ({
     },
     content: {
         flexGrow: 1,
+        height: 'calc(100vh - 64px)',
         padding: theme.spacing.unit * 3,
         transition: theme.transitions.create(['margin'], {
             easing: theme.transitions.easing.sharp,
@@ -171,11 +173,9 @@ class NewPaletteForm extends Component {
                     })}
                 >
                     <div className={classes.drawerHeader}/>
-                    <ul>
                         {curPalette.map(color => (
-                            <li style={{backgroundColor: color}}>{color}</li>
+                            <DraggableColorBox color={color}/>
                         ))}
-                    </ul>
                 </main>
             </div>
         );
