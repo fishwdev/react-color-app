@@ -3,17 +3,7 @@ import classNames from 'classnames';
 import {ChromePicker} from "react-color";
 import DraggableColorBox from "./DraggableColorBox";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
-import {
-    AppBar,
-    Button,
-    // CssBaseline,
-    Divider,
-    Drawer,
-    IconButton,
-    Toolbar,
-    Typography,
-    withStyles
-} from "@material-ui/core";
+import {AppBar, Button, Divider, Drawer, IconButton, Toolbar, Typography, withStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
@@ -91,7 +81,8 @@ class NewPaletteForm extends Component {
                 {color: 'blue', name: 'blue'},
                 {color: 'purple', name: 'purple'}
             ],
-            inputColor: ''
+            inputColor: '',
+            paletteName: ''
         }
         this.handleColorChange = this.handleColorChange.bind(this);
         this.addColor = this.addColor.bind(this);
@@ -108,6 +99,11 @@ class NewPaletteForm extends Component {
         ValidatorForm.addValidationRule('isColorUnique', () => (
             this.state.curPalette.every(
                 ({color}) => (color !== this.state.curColor)
+            )
+        ));
+        ValidatorForm.addValidationRule('isPaletteNameUnique', (value) => (
+            this.props.palettes.every(
+                ({paletteName}) => (paletteName.toLowerCase() !== value.toLowerCase())
             )
         ));
     }
@@ -146,7 +142,7 @@ class NewPaletteForm extends Component {
     }
 
     handleSave() {
-        let newPalletName = 'New Test Palette';
+        let newPalletName = this.state.paletteName;
         const newPalette = {
             paletteName: newPalletName,
             id: newPalletName.toLowerCase().replace(/ /g, '-'),
@@ -159,7 +155,7 @@ class NewPaletteForm extends Component {
 
     render() {
         const {classes, theme} = this.props;
-        const {curColor, curPalette, open, inputColor} = this.state;
+        const {curColor, curPalette, open, inputColor, paletteName} = this.state;
 
         return (
             <div className={classes.root}>
@@ -183,13 +179,23 @@ class NewPaletteForm extends Component {
                         <Typography variant='h6' color='inherit' noWrap>
                             Persistent drawer
                         </Typography>
-                        <Button
-                            variant='contained'
-                            color='primary'
-                            onClick={this.handleSave}
-                        >
-                            Save
-                        </Button>
+                        <ValidatorForm onSubmit={this.handleSave}>
+                            <TextValidator
+                                label='Palette Name'
+                                value={paletteName}
+                                name='paletteName'
+                                onChange={this.handleTextInputChange}
+                                validators={['required', 'isPaletteNameUnique']}
+                                errorMessages={['Field required', 'The palette name is already used']}
+                            />
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                type='submit'
+                            >
+                                Save
+                            </Button>
+                        </ValidatorForm>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -223,7 +229,7 @@ class NewPaletteForm extends Component {
                             validators={['required', 'isColorNameUnique', 'isColorUnique']}
                             errorMessages={[
                                 'Field required',
-                                'The color name is already existed',
+                                'The color name has already existed',
                                 'The color is already in the palette'
                             ]}
                             onChange={this.handleTextInputChange}
