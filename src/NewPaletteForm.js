@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import classNames from 'classnames';
 import {ChromePicker} from "react-color";
 import DraggableColorBox from "./DraggableColorBox";
+import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import {
     AppBar,
     Button,
@@ -82,21 +83,43 @@ class NewPaletteForm extends Component {
         this.state = {
             open: true,
             curColor: 'teal',
-            curPalette: ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+            curPalette: [{color: 'red', name: 'red'}],
+            inputColor: ''
         }
         this.handleColorChange = this.handleColorChange.bind(this);
         this.addColor = this.addColor.bind(this);
+        this.handleTextInputChange = this.handleTextInputChange.bind(this);
     }
 
-    addColor() {
-        this.setState((prevState) => (
-            {curPalette: [...prevState.curPalette, this.state.curColor]}
+    componentDidMount() {
+        ValidatorForm.addValidationRule('isColorNameUnique', (value) => (
+            this.state.curPalette.every(
+                ({name}) => (name.toLowerCase() !== value.toLowerCase())
+            )
+        ));
+        ValidatorForm.addValidationRule('isColorUnique', () => (
+            this.state.curPalette.every(
+                ({color}) => (color !== this.state.curColor)
+            )
         ));
     }
 
+    addColor() {
+        const newColor = {
+            color: this.state.curColor,
+            name: this.state.inputColor
+        };
+        this.setState((prevState) => ({
+            curPalette: [...prevState.curPalette, newColor],
+            inputColor: ''
+        }));
+    }
+
     handleColorChange(selectedColor) {
-        let {r, g, b ,a} = selectedColor.rgb;
-        this.setState({curColor: `rgba(${r},${g},${b},${a})`});
+        let {r, g, b, a} = selectedColor.rgb;
+        this.setState((prevProps) => ({
+            curColor: `rgba(${r},${g},${b},${a})`
+        }));
     }
 
     handleDrawerOpen = () => {
@@ -107,9 +130,13 @@ class NewPaletteForm extends Component {
         this.setState({open: false});
     };
 
+    handleTextInputChange = (evt) => {
+        this.setState({[evt.target.name]: evt.target.value});
+    }
+
     render() {
         const {classes, theme} = this.props;
-        const {curColor, curPalette, open} = this.state;
+        const {curColor, curPalette, open, inputColor} = this.state;
 
         return (
             <div className={classes.root}>
@@ -158,14 +185,27 @@ class NewPaletteForm extends Component {
                         color={curColor}
                         onChangeComplete={this.handleColorChange}
                     />
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        style={{backgroundColor: curColor}}
-                        onClick={this.addColor}
-                    >
-                        Add Color
-                    </Button>
+                    <ValidatorForm onSubmit={this.addColor}>
+                        <TextValidator
+                            value={inputColor}
+                            name='inputColor'
+                            validators={['required', 'isColorNameUnique', 'isColorUnique']}
+                            errorMessages={[
+                                'Field required',
+                                'The color name is already existed',
+                                'The color is already in the palette'
+                            ]}
+                            onChange={this.handleTextInputChange}
+                        />
+                        <Button
+                            variant='contained'
+                            type='submit'
+                            color='primary'
+                            style={{backgroundColor: curColor}}
+                        >
+                            Add Color
+                        </Button>
+                    </ValidatorForm>
                 </Drawer>
                 <main
                     className={classNames(classes.content, {
@@ -173,9 +213,9 @@ class NewPaletteForm extends Component {
                     })}
                 >
                     <div className={classes.drawerHeader}/>
-                        {curPalette.map(color => (
-                            <DraggableColorBox color={color}/>
-                        ))}
+                    {curPalette.map(color => (
+                        <DraggableColorBox color={color.color} name={color.name}/>
+                    ))}
                 </main>
             </div>
         );
