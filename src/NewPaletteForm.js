@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import PaletteFormNav from "./PaletteFormNav";
 import ColorPickerForm from "./ColorPickerForm";
+import PaletteFormNav from "./PaletteFormNav";
 import classNames from 'classnames';
 import {Button, Divider, Drawer, IconButton, Typography, withStyles} from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
