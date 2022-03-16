@@ -1,11 +1,12 @@
 import React, {Component} from "react";
 import classNames from 'classnames';
 import {ChromePicker} from "react-color";
-import DraggableColorBox from "./DraggableColorBox";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import {AppBar, Button, Divider, Drawer, IconButton, Toolbar, Typography, withStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import DraggableColorList from "./DraggableColorList";
+import {arrayMove} from "react-sortable-hoc";
 
 const drawerWidth = 400;
 
@@ -88,6 +89,7 @@ class NewPaletteForm extends Component {
         this.addColor = this.addColor.bind(this);
         this.handleTextInputChange = this.handleTextInputChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
+        this.removeColorBox = this.removeColorBox.bind(this);
     }
 
     componentDidMount() {
@@ -157,6 +159,12 @@ class NewPaletteForm extends Component {
         this.setState({
             curPalette: this.state.curPalette.filter(color => color.name !== colorName)
         });
+    }
+
+    onSortEnd = ({oldIndex, newIndex}) => {
+        this.setState(({curPalette}) => ({
+            curPalette: arrayMove(curPalette, oldIndex, newIndex),
+        }));
     }
 
     render() {
@@ -256,14 +264,12 @@ class NewPaletteForm extends Component {
                     })}
                 >
                     <div className={classes.drawerHeader}/>
-                    {curPalette.map(color => (
-                        <DraggableColorBox
-                            key={color.name}
-                            color={color.color}
-                            name={color.name}
-                            handleDelete={() => this.removeColorBox(color.color)}
-                        />
-                    ))}
+                    <DraggableColorList
+                        palette={curPalette}
+                        removeColorBox={this.removeColorBox}
+                        axis='xy'
+                        onSortEnd={this.onSortEnd}
+                    />
                 </main>
             </div>
         );
