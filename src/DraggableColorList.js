@@ -5,14 +5,14 @@ import {SortableContainer} from "react-sortable-hoc";
 const DraggableColorList = SortableContainer((props) => {
     const {palette, removeColorBox} = props;
     return (
-        <div style={{height: '100%'}}>
+        <div style={{height: '97%'}}>
             {palette.map((color, idx) => (
                 <DraggableColorBox
                     index={idx}
                     key={color.name}
                     color={color.color}
                     name={color.name}
-                    handleDelete={() => removeColorBox(color.color)}
+                    handleDelete={() => removeColorBox(color.name)}
                 />
             ))}
         </div>
