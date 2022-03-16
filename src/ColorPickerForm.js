@@ -1,7 +1,27 @@
 import React, {Component} from "react";
 import {ChromePicker} from "react-color";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
-import {Button} from "@material-ui/core";
+import {Button, withStyles} from "@material-ui/core";
+
+const styles = {
+    root: {
+        width: '100%'
+    },
+    colorPicker: {
+        width: '100% !important',
+        marginTop: '2rem'
+    },
+    addColorButton: {
+        width: '100%',
+        padding: '1rem',
+        marginTop: '1rem',
+        fonzSize: '2rem'
+    },
+    inputColor: {
+        width: '100%',
+        height: '40px'
+    }
+};
 
 class ColorPickerForm extends Component {
     constructor(props) {
@@ -53,19 +73,24 @@ class ColorPickerForm extends Component {
     }
 
     render() {
-        const {isPaletteFull} = this.props;
+        const {classes, isPaletteFull} = this.props;
         const {curColor, inputColor} = this.state;
 
         return (
-            <div>
+            <div className={classes.root}>
                 <ChromePicker
+                    className={classes.colorPicker}
                     color={curColor}
                     onChangeComplete={this.handleColorChange}
                 />
                 <ValidatorForm onSubmit={this.handleSubmit}>
                     <TextValidator
+                        className={classes.inputColor}
+                        variant='filled'
                         value={inputColor}
                         name='inputColor'
+                        placeholder='Color Name'
+                        margin='normal'
                         validators={['required', 'isColorNameUnique', 'isColorUnique']}
                         errorMessages={[
                             'Field required',
@@ -75,6 +100,7 @@ class ColorPickerForm extends Component {
                         onChange={this.handleTextInputChange}
                     />
                     <Button
+                        className={classes.addColorButton}
                         variant='contained'
                         type='submit'
                         color='primary'
@@ -89,4 +115,4 @@ class ColorPickerForm extends Component {
     };
 }
 
-export default ColorPickerForm;
+export default withStyles(styles)(ColorPickerForm);
