@@ -22,10 +22,16 @@ function App() {
         syncLocalStorage();
     }, [palettes])
 
+    function deletePalette(id) {
+        setPalettes(prevPalettes => (
+            prevPalettes.filter(palette => palette.id !== id)
+        ));
+    }
+
     function findPalette(id) {
         return palettes.find((palette) => {
             return palette.id === id;
-        })
+        });
     }
 
     function savePalette(newPalette) {
@@ -44,7 +50,7 @@ function App() {
                 <Route exact
                        path='/'
                        render={(routeProps) =>
-                           <PaletteList palettes={palettes} {...routeProps}/>
+                           <PaletteList deletePalette={deletePalette} palettes={palettes} {...routeProps}/>
                        }
                 />
                 <Route
