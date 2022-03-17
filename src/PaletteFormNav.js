@@ -18,6 +18,7 @@ const styles = theme => ({
         }),
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         height: '64px'
     },
     appBarShift: {
@@ -32,21 +33,42 @@ const styles = theme => ({
         marginLeft: 12,
         marginRight: 20
     },
-    navButtons: {}
+    navButtons: {
+        marginRight: '1rem',
+        '& a': {
+            textDecoration: 'none'
+        }
+    },
+    button: {
+        margin: '0 0.5rem',
+    }
 });
 
 class PaletteFormNav extends Component {
     constructor(props) {
         super(props);
+        this.state = {isSaveDialogShowing: false}
         this.handleTextInputChange = this.handleTextInputChange.bind(this);
+        this.hideSaveDialog = this.hideSaveDialog.bind(this);
+        this.showSaveDialog = this.showSaveDialog.bind(this);
     }
 
     handleTextInputChange = (evt) => {
         this.setState({[evt.target.name]: evt.target.value});
     }
 
+    hideSaveDialog() {
+        this.setState({isSaveDialogShowing: false});
+    }
+
+    showSaveDialog() {
+        this.setState({isSaveDialogShowing: true});
+    }
+
     render() {
         const {classes, handleDrawerOpen, handleSave, open, palettes} = this.props;
+        const {isSaveDialogShowing} = this.state;
+
         return (
             <div className={classes.root}>
                 {/*<CssBaseline/>*/}
@@ -71,12 +93,32 @@ class PaletteFormNav extends Component {
                         </Typography>
                     </Toolbar>
                     <div className={classes.navButtons}>
-                        <PaletteMetaForm palettes={palettes} handleSave={handleSave}/>
                         <Link to='/'>
-                            <Button variant='contained' color='secondary'>Back</Button>
+                            <Button
+                                className={classes.button}
+                                variant='contained'
+                                color='secondary'
+                            >
+                                Back
+                            </Button>
                         </Link>
+                        <Button
+                            className={classes.button}
+                            variant='contained'
+                            color='primary'
+                            onClick={this.showSaveDialog}
+                        >
+                            Save
+                        </Button>
                     </div>
                 </AppBar>
+                {isSaveDialogShowing &&
+                    <PaletteMetaForm
+                        palettes={palettes}
+                        handleSave={handleSave}
+                        hideSaveDialog={this.hideSaveDialog}
+                    />
+                }
             </div>
         );
     };

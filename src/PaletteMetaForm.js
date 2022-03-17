@@ -1,24 +1,21 @@
 import React, {Component} from "react";
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle
-} from "@material-ui/core";
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
+import {Picker} from "emoji-mart";
+import 'emoji-mart/css/emoji-mart.css';
 
 class PaletteMetaForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            open: false,
+            open: 'paletteName',
             paletteName: ''
         }
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.handleTextInputChange = this.handleTextInputChange.bind(this);
+        this.showEmojiPicker = this.showEmojiPicker.bind(this);
     }
 
     componentDidMount() {
@@ -37,42 +34,62 @@ class PaletteMetaForm extends Component {
         this.setState({open: false});
     }
 
+    handleSelect(emoji) {
+        const newPaletteInfo = {
+            paletteName: this.state.paletteName,
+            emoji: emoji.native
+        };
+        this.props.handleSave(newPaletteInfo);
+    }
+
     handleTextInputChange = (evt) => {
         this.setState({[evt.target.name]: evt.target.value});
     }
 
+    showEmojiPicker() {
+        this.setState({open: 'emoji'});
+    }
+
     render() {
-        const {handleSave} = this.props;
+        const {hideSaveDialog} = this.props;
         const {open, paletteName} = this.state;
 
         return (
             <div>
-                <Button
-                    variant='outlined'
-                    color='primary'
-                    onClick={this.handleClickOpen}
-                >
-                    Open form dialog
-                </Button>
                 <Dialog
-                    open={open}
-                    onClose={this.handleClose}
+                    open={open === 'emoji'}
+                    onClose={hideSaveDialog}
+                >
+                    <DialogTitle id='form-dialog-title'>Emoji</DialogTitle>
+                    <Picker title='Pick a emoji' onSelect={this.handleSelect}/>
+                </Dialog>
+
+                <Dialog
+                    open={open === 'paletteName'}
+                    onClose={hideSaveDialog}
                     aria-labelledby='form-dialog-title'
                 >
-                    <DialogTitle id='form-dialog-title'>Subscribe</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            test
-                        </DialogContentText>
-                        <ValidatorForm onSubmit={() => handleSave(paletteName)}>
+                    <DialogTitle id='form-dialog-title'>Save</DialogTitle>
+                    <ValidatorForm onSubmit={this.showEmojiPicker}>
+                        <DialogContent>
+                            <DialogContentText>
+                                Please input the name of the new palette:
+                            </DialogContentText>
                             <TextValidator
                                 label='Palette Name'
                                 value={paletteName}
                                 name='paletteName'
                                 onChange={this.handleTextInputChange}
+                                fullWidth
+                                margin='normal'
                                 validators={['required', 'isPaletteNameUnique']}
                                 errorMessages={['Field required', 'The palette name is already used']}
                             />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={hideSaveDialog} color='primary'>
+                                Cancel
+                            </Button>
                             <Button
                                 variant='contained'
                                 color='primary'
@@ -80,16 +97,8 @@ class PaletteMetaForm extends Component {
                             >
                                 Save
                             </Button>
-                        </ValidatorForm>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleClose} color='primary'>
-                            Cancel
-                        </Button>
-                        <Button onClick={this.handleClose} color='primary'>
-                            Subscribe
-                        </Button>
-                    </DialogActions>
+                        </DialogActions>
+                    </ValidatorForm>
                 </Dialog>
             </div>
         );
