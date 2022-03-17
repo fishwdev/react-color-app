@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Route, Switch} from "react-router-dom";
 import PaletteList from "./PaletteList";
 import Palette from "./Palette";
@@ -10,7 +10,17 @@ import './App.css';
 
 function App() {
 
-    const[palettes, setPalettes] = useState(seedPalettes);
+    const savedPalettes = JSON.parse(window.localStorage.getItem('palettes'));
+
+    const[palettes, setPalettes] = useState(savedPalettes || seedPalettes);
+
+    useEffect(() => {
+        function syncLocalStorage() {
+            // save palettes to local storage
+            window.localStorage.setItem('palettes', JSON.stringify(palettes));
+        }
+        syncLocalStorage();
+    }, [palettes])
 
     function findPalette(id) {
         return palettes.find((palette) => {
