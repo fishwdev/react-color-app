@@ -153,6 +153,7 @@ class NewPaletteForm extends Component {
                 >
                     <div className={classes.drawerHeader}/>
                     <DraggableColorList
+                        distance={20}
                         palette={curPalette}
                         removeColorBox={this.removeColorBox}
                         axis='xy'
