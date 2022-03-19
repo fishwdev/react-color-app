@@ -40,6 +40,7 @@ class PaletteMetaForm extends Component {
             emoji: emoji.native
         };
         this.props.handleSave(newPaletteInfo);
+        this.setState({open: ''});
     }
 
     handleTextInputChange = (evt) => {
