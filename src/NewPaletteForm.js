@@ -6,6 +6,7 @@ import DraggableColorList from "./DraggableColorList";
 import {arrayMove} from "react-sortable-hoc";
 import ColorPickerForm from "./ColorPickerForm";
 import PaletteFormNav from "./PaletteFormNav";
+import seedPalettes from "./seedPalettes";
 import styles from "./styles/NewPaletteFormStyle";
 
 class NewPaletteForm extends Component {
@@ -25,7 +26,7 @@ class NewPaletteForm extends Component {
             //     {color: 'blue', name: 'blue'},
             //     {color: 'purple', name: 'purple'}
             // ],
-            curPalette: this.props.palettes[0].colors
+            curPalette: seedPalettes[0].colors
         }
         this.addColor = this.addColor.bind(this);
         this.clearPalette = this.clearPalette.bind(this);
@@ -119,7 +120,7 @@ class NewPaletteForm extends Component {
                     </div>
                     <Divider/>
                     <div className={classes.container}>
-                        <Typography variant='h4' gutterBottom>Design your palette</Typography>
+                        <Typography variant='h4' gutterBottom>Palette Design</Typography>
                         <div className={classes.buttonContainer}>
                             <Button
                                 className={classes.button}

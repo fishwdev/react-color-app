@@ -9,7 +9,7 @@ const styles = {
     addColorButton: {
         width: '100%',
         padding: '1rem',
-        marginTop: '1rem',
+        marginTop: '2rem',
         fonzSize: '2rem'
     },
     inputColor: {
