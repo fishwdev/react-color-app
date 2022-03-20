@@ -88,6 +88,15 @@ function App() {
                                     </Page>
                                 )}
                             />
+                            <Route render={(routeProps) => (
+                                       <Page>
+                                           <PaletteList deletePalette={deletePalette}
+                                                        palettes={palettes}
+                                                        {...routeProps}
+                                           />
+                                       </Page>
+                                   )}
+                            />
                         </Switch>
                     </CSSTransition>
                 </TransitionGroup>
