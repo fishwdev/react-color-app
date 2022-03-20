@@ -45,8 +45,12 @@ export default {
         '& .rc-slider-track': {
             backgroundColor: 'transparent'
         },
-        [sizes.down('xs')]: {
+        [sizes.down('sm')]: {
             width: '150%'
+        }
+        ,
+        [sizes.down('xs')]: {
+            width: '100%'
         }
     },
     selectContainer: {
