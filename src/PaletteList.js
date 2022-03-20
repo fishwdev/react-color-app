@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import MiniPalette from "./MiniPalette";
 import {Link} from 'react-router-dom';
 import {CSSTransition, TransitionGroup} from "react-transition-group";
 import {Avatar, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListItemText} from "@material-ui/core";
@@ -8,6 +7,7 @@ import {red} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import {withStyles} from "@material-ui/styles";
+import MiniPalette from "./MiniPalette";
 import styles from './styles/PaletteListStyles';
 
 class PaletteList extends Component {

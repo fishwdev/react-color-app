@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import ColorPickerForm from "./ColorPickerForm";
-import PaletteFormNav from "./PaletteFormNav";
 import classNames from 'classnames';
 import {Button, Divider, Drawer, IconButton, Typography, withStyles} from "@material-ui/core";
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DraggableColorList from "./DraggableColorList";
 import {arrayMove} from "react-sortable-hoc";
+import ColorPickerForm from "./ColorPickerForm";
+import PaletteFormNav from "./PaletteFormNav";
 import styles from "./styles/NewPaletteFormStyle";
 
 class NewPaletteForm extends Component {
@@ -91,7 +91,7 @@ class NewPaletteForm extends Component {
     }
 
     render() {
-        const {classes, maxColors, palettes, theme} = this.props;
+        const {classes, maxColors, palettes} = this.props;
         const {curPalette, open} = this.state;
         const isPaletteFull = curPalette.length >= maxColors;
 

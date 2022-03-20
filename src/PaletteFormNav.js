@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import PaletteMetaForm from "./PaletteMetaForm";
 import classNames from 'classnames';
 import {AppBar, Button, IconButton, Toolbar, Typography, withStyles} from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import {Link} from "react-router-dom";
+import PaletteMetaForm from "./PaletteMetaForm";
 import styles from "./styles/PaletteFormNavStyle";
 
 class PaletteFormNav extends Component {
